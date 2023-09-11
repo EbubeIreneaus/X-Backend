@@ -43,7 +43,7 @@ class TweetView(APIView):
 			return JsonResponse({'status': 'failed', 'code':str(e)})
 
 	def get(self, request):
-		tweet = Tweet.objects.all()
+		tweet = Tweet.objects.order_by('-id').all()
 		stw = TweetSerializer(tweet, many=True)
 		return JsonResponse(stw.data, safe=False)
 
@@ -86,10 +86,8 @@ def reply_tweet(request):
 					elif mime_type and mime_type.startswith('video'):
 						file = TweeetFile(file=file, type='vid')
 					file.save()
-					comment.media.add(file) #add media to comment
-					comment.save()
-			tweet.comments.add(comment) #add comment to tweet
-			return JsonResponse({'status': 'success'})
+					comment.media.add(file) #add media to comment					comment.save(
+			tweet.comments.add(comment) #add comment to tweet			return JsonResponse({'status': 'success'})
 		except Exception as e:
 			return JsonResponse({'status': 'failed', 'code': str(e)})
 
@@ -152,3 +150,20 @@ def get_comment(request, id):
 	comment = Comment.objects.get(id=id)
 	comment_serialize = CommentSerializer(comment)
 	return JsonResponse(comment_serialize.data, safe=False)
+
+
+def get_profile_tweet(request, id):
+	tweet = Tweet.objects.order_by('-id').filter(profile__user__id=id)
+	stw = TweetSerializer(tweet, many=True)
+	return JsonResponse(stw.data, safe=False)
+
+def get_liked_tweet(request, id):
+	tweet = Tweet.objects.order_by('-id').filter(likes__user__id=id)
+	stw = TweetSerializer(tweet, many=True)
+	return JsonResponse(stw.data, safe=False)
+
+
+def get_replied_tweet(request, id):
+	tweet = Tweet.objects.order_by('-id').filter(comments__profile__user__id=id)
+	stw = TweetSerializer(tweet, many=True)
+	return JsonResponse(stw.data, safe=False)

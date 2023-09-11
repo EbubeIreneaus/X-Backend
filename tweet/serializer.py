@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Tweet, TweeetFile, Comment, Like
 from django.contrib.auth.models import User
-from auth.models import Profile
+from auth.models import Profile, Follow
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -15,11 +15,28 @@ class LikeSerializer(serializers.ModelSerializer):
 		model = Like
 		fields = ['user', 'tweetId']
 
-class ProfileSerializer(serializers.ModelSerializer):
+
+class ProfileFollowerSerializer(serializers.ModelSerializer):
 	user = UserSerializer()
+
 	class Meta:
 		model = Profile
 		fields = "__all__"
+
+class FollowSerializer(serializers.ModelSerializer):
+	my_profile = ProfileFollowerSerializer()
+	class Meta:
+		model = Follow
+		fields = "__all__"
+
+class ProfileSerializer(serializers.ModelSerializer):
+	user = UserSerializer()
+	followers = FollowSerializer(many=True)
+	class Meta:
+		model = Profile
+		fields = "__all__"
+
+
 class MediaSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = TweeetFile
@@ -50,6 +67,8 @@ class CommentSerializer(serializers.ModelSerializer):
 		# Assuming you want to serialize replies as a list of Comment objects
 		replies = Comment.objects.filter(replies=obj)
 		return CommentReplySerializer(replies, many=True).data
+
+
 class TweetSerializer(serializers.ModelSerializer):
 	media = MediaSerializer(many=True)
 	profile = ProfileSerializer()
