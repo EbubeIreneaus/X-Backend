@@ -16,11 +16,11 @@ class Like(models.Model):
 class Comment(models.Model):
 	profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 	tweet_txt = models.TextField(null=True)
-	media = models.ManyToManyField(TweeetFile, null=True)
-	likes = models.ManyToManyField(Like, null=True)
+	media = models.ManyToManyField(TweeetFile)
+	likes = models.ManyToManyField(Like)
 	views = models.IntegerField(default=1)
 	date = models.DateField(auto_now_add=True)
-	replies = models.ManyToManyField('self', null=True)
+	replies = models.ManyToManyField('self')
 	def __str__(self):
 		return f'{self.pk} {self.tweet_txt}  {self.date}'
 	
@@ -28,9 +28,9 @@ class Comment(models.Model):
 class Tweet(models.Model):
 	profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 	tweet_txt = models.TextField(null=True)
-	media = models.ManyToManyField(TweeetFile, null=True)
-	comments = models.ManyToManyField(Comment, null=True)
-	likes = models.ManyToManyField(Like, null=True)
+	media = models.ManyToManyField(TweeetFile)
+	comments = models.ManyToManyField(Comment)
+	likes = models.ManyToManyField(Like)
 	views = models.IntegerField(default=1)
 	date = models.DateField(auto_now_add=True)
 
