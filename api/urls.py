@@ -22,6 +22,7 @@ from django.views.static import serve
 
 urlpatterns = [
     re_path(r'^assets/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    re_path(r'^profile/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 
     path('admin/', admin.site.urls),
     path('auth/', include('auth.urls')),
