@@ -146,8 +146,7 @@ EMAIL_HOST_USER = 'alfredebube7@gmail.com'
 EMAIL_HOST_PASSWORD = 'qsuomhfdhunuiome'
 EMAIL_USE_SSL = True
 
-CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_METHODS = [
     'GET',
     'POST',
