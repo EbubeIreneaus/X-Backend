@@ -89,7 +89,8 @@ def reply_tweet(request):
 						file = TweeetFile(file=file, type='vid')
 					file.save()
 					comment.media.add(file) #add media to comment					comment.save(
-			tweet.comments.add(comment) #add comment to tweet			return JsonResponse({'status': 'success'})
+			tweet.comments.add(comment) #add comment to tweet
+			return JsonResponse({'status': 'success'})
 		except Exception as e:
 			return JsonResponse({'status': 'failed', 'code': str(e)})
 
