@@ -23,6 +23,8 @@ class TweetView(APIView):
 
 		profile = Profile.objects.get(user__id=request.headers.get('userId'))
 		tweet_txt = re.sub('/[<>]/','',request.POST.get('tweet', ''))
+		if tweet_txt == 'null':
+			tweet_txt = ''
 
 		medias = request.FILES.getlist('files','')
 		try:
@@ -33,8 +35,8 @@ class TweetView(APIView):
 					mime_type, _ = mimetypes.guess_type(file.name)
 					if mime_type and mime_type.startswith('image'):
 						file = TweeetFile(file=file, type='img')
-					elif mime_type and mime_type.startswith('video'):
-						file = TweeetFile(file=file, type='vid')
+					# elif mime_type and mime_type.startswith('video'):
+					# 	file = TweeetFile(file=file, type='vid')
 					file.save()
 					tweet.media.add(file)
 			tweet.save()
@@ -135,8 +137,8 @@ def reply_comment(request):
 					mime_type, _ = mimetypes.guess_type(file.name)
 					if mime_type and mime_type.startswith('image'):
 						file = TweeetFile(file=file, type='img')
-					elif mime_type and mime_type.startswith('video'):
-						file = TweeetFile(file=file, type='vid')
+					# elif mime_type and mime_type.startswith('video'):
+					# 	file = TweeetFile(file=file, type='vid')
 					file.save()
 					reply.media.add(file)  # add media to comment
 					reply.save()
